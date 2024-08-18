@@ -6,11 +6,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
-        print("hello world for branch to merge")
+        sleep(3)
         return true
     }
 
-    // MARK: UISceneSession Lifecycle
 
     func application(
         _ application: UIApplication,
