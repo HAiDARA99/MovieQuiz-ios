@@ -21,6 +21,8 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet weak private var imageView: UIImageView!
     @IBOutlet weak private var counterLabel: UILabel!
     @IBOutlet weak private var textLabel: UILabel!
+    @IBOutlet weak private var noButton: UIButton!
+    @IBOutlet weak private var yesButton: UIButton!
     
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
@@ -81,11 +83,11 @@ final class MovieQuizViewController: UIViewController {
     }
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
-        let QuestionStep = QuizStepViewModel(
+        let questionStep = QuizStepViewModel(
             image: UIImage(named: model.image) ?? UIImage(),
             question: model.text,
             questionNumber: "\(currentQuestionIndex + 1)/\(questions.count)")
-        return QuestionStep
+        return questionStep
     }
     
     private func show(quiz step: QuizStepViewModel) {
@@ -99,8 +101,9 @@ final class MovieQuizViewController: UIViewController {
             correctAnswers += 1
         }
         
-        imageView.layer.masksToBounds = true
-        imageView.layer.borderWidth = 8
+        noButton.isEnabled = false
+        yesButton.isEnabled = false
+        
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -108,12 +111,10 @@ final class MovieQuizViewController: UIViewController {
         }
     }
     
-    private func resetPreviousAnswerState() {
-        imageView.layer.borderWidth = 0
-        imageView.layer.borderColor = nil
-    }
-    
     private func showNextQuestionOrResults() {
+        noButton.isEnabled = true
+        yesButton.isEnabled = true
+        
         if currentQuestionIndex == questions.count - 1 {
             let text = "Ваш результат: \(correctAnswers)/\(questions.count)"
             let alert = UIAlertController(
@@ -125,6 +126,8 @@ final class MovieQuizViewController: UIViewController {
             let action = UIAlertAction(title: "Сыграть еще раз?", style: .default) { _ in
                 self.currentQuestionIndex = 0
                 self.correctAnswers = 0
+                self.imageView.layer.borderWidth = 0
+                self.imageView.layer.borderColor = nil
                 let firstQuestion = self.questions[self.currentQuestionIndex]
                 let viewModel = self.convert(model: firstQuestion)
                 self.show(quiz: viewModel)
@@ -140,23 +143,5 @@ final class MovieQuizViewController: UIViewController {
             let viewModel = convert(model: nextQuestion)
             show(quiz: viewModel)
         }
-        
     }
 }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-    
